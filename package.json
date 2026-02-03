@@ -1,7 +1,7 @@
 {
   "name": "laravel-model-inspector-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for inspecting Laravel Eloquent model schemas. Lists models, displays columns, types, relationships, casts, and traits.",
+  "version": "1.1.0",
+  "description": "MCP server for inspecting Laravel Eloquent models and PHP enums. Lists models/enums, displays schemas, relationships, cases, methods, and more.",
   "type": "module",
   "main": "server.js",
   "bin": {

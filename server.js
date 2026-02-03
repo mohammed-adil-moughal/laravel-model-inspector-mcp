@@ -14,7 +14,8 @@ import { existsSync } from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PHP_SCRIPT = join(__dirname, "schema-extractor.php");
+const MODEL_SCRIPT = join(__dirname, "schema-extractor.php");
+const ENUM_SCRIPT = join(__dirname, "enum-extractor.php");
 
 // Support multiple ways to specify the Laravel project root:
 // 1. LARAVEL_PATH environment variable
@@ -37,10 +38,10 @@ function getProjectRoot() {
 
 const PROJECT_ROOT = getProjectRoot();
 
-function runPhpCommand(command, argument = "") {
+function runPhpCommand(script, command, argument = "") {
   try {
     const args = argument ? `${command} "${argument}"` : command;
-    const result = execSync(`php "${PHP_SCRIPT}" ${args}`, {
+    const result = execSync(`php "${script}" ${args}`, {
       cwd: PROJECT_ROOT,
       encoding: "utf-8",
       maxBuffer: 10 * 1024 * 1024,
@@ -54,8 +55,8 @@ function runPhpCommand(command, argument = "") {
 
 const server = new Server(
   {
-    name: "model-inspector",
-    version: "1.0.0",
+    name: "laravel-inspector",
+    version: "1.1.0",
   },
   {
     capabilities: {
@@ -108,6 +109,62 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["query"],
         },
       },
+      {
+        name: "list_enums",
+        description:
+          "List all PHP enums in the Laravel application. Returns enum names, backing types, and case counts.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          required: [],
+        },
+      },
+      {
+        name: "get_enum_details",
+        description:
+          "Get detailed information for a specific PHP enum. Returns all cases with values, custom methods, attributes, traits, and interfaces.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            enum: {
+              type: "string",
+              description:
+                "The enum name (e.g., 'AccountType', 'Accounts/AccountStatus'). Can include subdirectory path.",
+            },
+          },
+          required: ["enum"],
+        },
+      },
+      {
+        name: "get_enum_values",
+        description:
+          "Get just the case names and values for an enum. Useful for quick lookups of valid values.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            enum: {
+              type: "string",
+              description: "The enum name",
+            },
+          },
+          required: ["enum"],
+        },
+      },
+      {
+        name: "search_enums",
+        description:
+          "Search for enums by name. Useful when you're not sure of the exact enum name.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            query: {
+              type: "string",
+              description: "Search query to match against enum names",
+            },
+          },
+          required: ["query"],
+        },
+      },
     ],
   };
 });
@@ -118,14 +175,28 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   let result;
 
   switch (name) {
+    // Model tools
     case "list_models":
-      result = runPhpCommand("list");
+      result = runPhpCommand(MODEL_SCRIPT, "list");
       break;
     case "get_model_schema":
-      result = runPhpCommand("schema", args.model);
+      result = runPhpCommand(MODEL_SCRIPT, "schema", args.model);
       break;
     case "search_models":
-      result = runPhpCommand("search", args.query);
+      result = runPhpCommand(MODEL_SCRIPT, "search", args.query);
+      break;
+    // Enum tools
+    case "list_enums":
+      result = runPhpCommand(ENUM_SCRIPT, "list");
+      break;
+    case "get_enum_details":
+      result = runPhpCommand(ENUM_SCRIPT, "details", args.enum);
+      break;
+    case "get_enum_values":
+      result = runPhpCommand(ENUM_SCRIPT, "values", args.enum);
+      break;
+    case "search_enums":
+      result = runPhpCommand(ENUM_SCRIPT, "search", args.query);
       break;
     default:
       result = { error: `Unknown tool: ${name}` };
@@ -144,7 +215,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Model Inspector MCP Server running on stdio");
+  console.error("Laravel Inspector MCP Server running on stdio");
 }
 
 main().catch(console.error);
