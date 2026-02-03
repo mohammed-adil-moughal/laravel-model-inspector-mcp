@@ -1,0 +1,39 @@
+{
+  "name": "laravel-model-inspector-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for inspecting Laravel Eloquent model schemas. Lists models, displays columns, types, relationships, casts, and traits.",
+  "type": "module",
+  "main": "server.js",
+  "bin": {
+    "laravel-model-inspector-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "mcp",
+    "laravel",
+    "eloquent",
+    "model",
+    "schema",
+    "inspector",
+    "cursor",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp/issues"
+  },
+  "homepage": "https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}
