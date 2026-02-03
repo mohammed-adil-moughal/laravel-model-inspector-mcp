@@ -185,7 +185,7 @@ The tool connects to your database to get column information. Ensure:
 
 Use the full path for models in subdirectories:
 - `User` for `app/Models/User.php`
-- `Accounts/IraAccount` for `app/Models/Accounts/IraAccount.php`
+- `Accounts/IRA` for `app/Models/Accounts/IRA.php`
 
 ## License
 
