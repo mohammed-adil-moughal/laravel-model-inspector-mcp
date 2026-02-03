@@ -2,6 +2,34 @@
 
 MCP (Model Context Protocol) server for inspecting Laravel Eloquent model schemas. Works with any Laravel project.
 
+## Why Use This?
+
+**The Problem:** Large Laravel projects have hundreds of models and migrations. Finding schema information means hunting through migration files, reading model code, and piecing together relationships manually.
+
+**The Solution:** Instant, accurate model introspection that gives AI assistants (and you) complete schema context in seconds.
+
+### Tangible Benefits
+
+| Benefit | Without Tool | With Tool |
+|---------|--------------|-----------|
+| **Schema lookup** | Read migrations + model + check casts (2-5 min) | Single query (4 seconds) |
+| **Relationship discovery** | Trace through multiple model files | See all relationships at once |
+| **Column types** | Hope the migration is up to date | Live data from database |
+| **New feature context** | "What columns exist on Payment?" requires file hunting | Instant answer with all 50+ columns |
+
+### Real-World Impact
+
+- **Fewer questions:** AI already knows your schema, writes correct code on first try
+- **Prevents bugs:** No more wrong column type assumptions or missing relationships
+- **Faster development:** Skip the migration archaeology on large codebases
+- **Accurate traversal:** Instantly see `User -> WebIra -> WebTrustasset` relationship chains
+
+### Security
+
+- **Read-only:** Only inspects existing code and database schema
+- **No external calls:** All processing happens locally
+- **No data access:** Reads structure only, not your actual data
+
 ## Features
 
 - **list_models** - List all Eloquent models in the application
