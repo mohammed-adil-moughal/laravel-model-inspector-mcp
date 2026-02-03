@@ -63,7 +63,23 @@ MCP (Model Context Protocol) server for inspecting Laravel Eloquent models and P
 
 ## Installation
 
-### Option 1: Clone/Download to your machine
+### Quick Install (Recommended)
+
+```bash
+# Clone the tool
+git clone https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp.git ~/.cursor-tools/laravel-model-inspector-mcp
+
+# Run the install script from your Laravel project
+cd /path/to/your/laravel/project
+~/.cursor-tools/laravel-model-inspector-mcp/install.sh
+```
+
+The install script will:
+- Install npm dependencies
+- Detect your node path (required for Cursor)
+- Create/update `.cursor/mcp.json` with the correct configuration
+
+### Manual Installation
 
 ```bash
 git clone https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp.git ~/.cursor-tools/laravel-model-inspector-mcp
@@ -71,63 +87,54 @@ cd ~/.cursor-tools/laravel-model-inspector-mcp
 npm install
 ```
 
-### Option 2: Install per-project (in .cursor-tools/)
-
-```bash
-mkdir -p .cursor-tools
-cd .cursor-tools
-git clone https://github.com/mohammed-adil-moughal/laravel-model-inspector-mcp.git model-inspector
-cd model-inspector
-npm install
-```
-
-Add `.cursor-tools/` to your global gitignore to avoid committing.
+Then manually create `.cursor/mcp.json` in your Laravel project (see Configuration below).
 
 ## Configuration
 
-Add to your Cursor MCP configuration (`.cursor/mcp.json` in your project):
+**Important:** Use the full path to `node`, not just `node`. Cursor doesn't have access to your shell's PATH.
 
-### Global Installation
+Find your node path:
+```bash
+which node
+```
+
+Add to your Cursor MCP configuration (`.cursor/mcp.json` in your Laravel project):
 
 ```json
 {
   "mcpServers": {
     "model-inspector": {
-      "command": "node",
-      "args": ["~/.cursor-tools/laravel-model-inspector-mcp/server.js"],
+      "command": "/full/path/to/node",
+      "args": ["/full/path/to/laravel-model-inspector-mcp/server.js"],
       "cwd": "/path/to/your/laravel/project"
     }
   }
 }
 ```
 
-### Per-Project Installation
+### Example Configuration
 
+macOS with Herd:
 ```json
 {
   "mcpServers": {
     "model-inspector": {
-      "command": "node",
-      "args": [".cursor-tools/model-inspector/server.js"],
-      "cwd": "/path/to/your/laravel/project"
+      "command": "/Users/yourname/Library/Application Support/Herd/config/nvm/versions/node/v18.19.1/bin/node",
+      "args": ["/Users/yourname/.cursor-tools/laravel-model-inspector-mcp/server.js"],
+      "cwd": "/Users/yourname/projects/my-laravel-app"
     }
   }
 }
 ```
 
-### Using Environment Variable
-
-You can also set `LARAVEL_PATH` explicitly:
-
+macOS/Linux with nvm:
 ```json
 {
   "mcpServers": {
     "model-inspector": {
-      "command": "node",
-      "args": ["/path/to/server.js"],
-      "env": {
-        "LARAVEL_PATH": "/path/to/your/laravel/project"
-      }
+      "command": "/Users/yourname/.nvm/versions/node/v20.10.0/bin/node",
+      "args": ["/Users/yourname/.cursor-tools/laravel-model-inspector-mcp/server.js"],
+      "cwd": "/Users/yourname/projects/my-laravel-app"
     }
   }
 }
